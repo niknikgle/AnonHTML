@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ thread.title }} - AnonHTML</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header>
+    <a href="/">AnonHTML</a>
+</header>
+<main>
+    <h2>{{ thread.title }}</h2>
+    <p><strong>{{ thread.nickname }}</strong> at {{ thread.timestamp }}</p>
+    <p>{{ thread.content }}</p>
+
+    <h3>Replies</h3>
+    <ul>
+        {% for reply in thread.replies %}
+            <li><strong>{{ reply.nickname }}</strong> at {{ reply.timestamp }}:<br> {{ reply.content }}</li>
+        {% endfor %}
+    </ul>
+
+    <form action="/reply/{{ thread.id }}" method="post">
+        <input type="text" name="nickname" placeholder="Nickname (optional)">
+        <textarea name="content" required placeholder="Reply here..."></textarea>
+        <button type="submit">Reply</button>
+    </form>
+</main>
+</body>
+</html>

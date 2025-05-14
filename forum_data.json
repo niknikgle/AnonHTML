@@ -1,0 +1,21 @@
+[
+    {
+        "id": 1,
+        "title": "test",
+        "nickname": "",
+        "content": "skibidi test",
+        "timestamp": "2025-05-14T12:44:47.192770",
+        "replies": [
+            {
+                "nickname": "test",
+                "content": "huh",
+                "timestamp": "2025-05-14T12:46:51.719796"
+            },
+            {
+                "nickname": "",
+                "content": "what",
+                "timestamp": "2025-05-14T12:46:56.715355"
+            }
+        ]
+    }
+]
