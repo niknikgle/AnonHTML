@@ -118,6 +118,11 @@
             line-height: 1.6;
             padding: 0.5rem 0;
         }
+        .reply-content img {
+            max-width: 100%;
+            border-radius: 6px;
+            margin-top: 0.5rem;
+        }
 
         /* Reply form */
         .reply-form {
@@ -135,6 +140,9 @@
             border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 1rem;
+        }
+        .reply-form input[type="file"] {
+            margin-bottom: 1rem;
         }
         .reply-form textarea {
             min-height: 80px;
@@ -196,6 +204,9 @@
                     </div>
                     <div class="reply-content">
                         {{ reply.content }}
+                        {% if reply.image_url %}
+                            <img src="{{ reply.image_url }}" alt="Reply image">
+                        {% endif %}
                     </div>
                 </li>
             {% endfor %}
@@ -203,9 +214,10 @@
 
         <div class="reply-form">
             <h3>Post a Reply</h3>
-            <form action="/reply/{{ thread.id }}" method="post">
+            <form action="/reply/{{ thread.id }}" method="post" enctype="multipart/form-data">
                 <input type="text" name="nickname" placeholder="Nickname (optional)">
                 <textarea name="content" required placeholder="Reply here..."></textarea>
+                <input type="file" name="image" accept="image/*">
                 <button type="submit">Reply</button>
             </form>
         </div>
