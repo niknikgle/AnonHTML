@@ -6,6 +6,7 @@
     <title>{{ thread.title }} - AnonHTML</title>
     <link rel="stylesheet" href="/static/style.css">
     <style>
+        /* Global and body settings */
         body {
             font-family: 'Segoe UI', sans-serif;
             background-color: #f4f4f9;
@@ -15,7 +16,7 @@
             animation: fadeIn 0.6s ease-in;
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
+            height: 100vh;
         }
 
         @keyframes fadeIn {
@@ -23,32 +24,26 @@
             to { opacity: 1; }
         }
 
-        a {
-            color: white;
-            font-size: 1.5rem;
-            font-weight: bold;
-            transition: color 0.2s;
-        }
-
-        a:hover {
-            color: #1abc9c;
-        }
-
+        /* Header styling */
         header {
             background-color: #2c3e50;
             color: white;
             padding: 1.5rem 2rem;
             text-align: left;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            flex: 0 0 auto;
         }
-
         header a {
             color: white;
             font-size: 1.75rem;
             font-weight: bold;
+            text-decoration: none;
         }
 
+        /* Make main scrollable when content overflows */
         main {
+            flex: 1 1 auto;
+            overflow-y: auto;
             max-width: 800px;
             margin: 2rem auto;
             padding: 2rem;
@@ -57,6 +52,7 @@
             border-radius: 12px;
         }
 
+        /* Thread info and content */
         .thread-info {
             display: flex;
             justify-content: space-between;
@@ -65,12 +61,10 @@
             color: #777;
             font-size: 0.9rem;
         }
-
         .thread-info strong {
             color: #555;
             font-weight: bold;
         }
-
         .thread-content {
             line-height: 1.6;
             margin-bottom: 2rem;
@@ -80,24 +74,26 @@
             background-color: #f9f9f9;
         }
 
+        /* Headings */
         h2 {
             color: #2c3e50;
             margin-bottom: 1.5rem;
             border-bottom: 2px solid #eee;
             padding-bottom: 0.75rem;
         }
-
         h3 {
             color: #3498db;
             margin-top: 2rem;
             margin-bottom: 1rem;
         }
 
+        /* Replies list scrollable region */
         .replies-list {
             list-style: none;
             padding: 0;
+            max-height: 400px;
+            overflow-y: auto;
         }
-
         .reply-item {
             margin-bottom: 1.5rem;
             padding: 1rem;
@@ -106,7 +102,6 @@
             background-color: white;
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
-
         .reply-header {
             display: flex;
             justify-content: space-between;
@@ -115,17 +110,16 @@
             color: #777;
             font-size: 0.85rem;
         }
-
         .reply-header strong {
             color: #555;
             font-weight: bold;
         }
-
         .reply-content {
             line-height: 1.6;
             padding: 0.5rem 0;
         }
 
+        /* Reply form */
         .reply-form {
             margin-top: 2rem;
             padding: 1.5rem;
@@ -133,7 +127,6 @@
             border-radius: 8px;
             border: 1px solid #eee;
         }
-
         .reply-form input[type="text"],
         .reply-form textarea {
             width: calc(100% - 1.5rem);
@@ -143,11 +136,9 @@
             border-radius: 5px;
             font-size: 1rem;
         }
-
         .reply-form textarea {
             min-height: 80px;
         }
-
         .reply-form button {
             background-color: #3498db;
             color: white;
@@ -158,11 +149,11 @@
             font-size: 1rem;
             transition: background-color 0.3s ease-in-out;
         }
-
         .reply-form button:hover {
             background-color: #2980b9;
         }
 
+        /* Wavy background animation */
         .wavy-background {
             position: fixed;
             top: 0;
@@ -173,17 +164,10 @@
             background: linear-gradient(180deg, #BDC3C7, #2C3E50);
             animation: gradientWave 10s ease-in-out infinite;
         }
-
         @keyframes gradientWave {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
     </style>
 </head>
@@ -195,7 +179,8 @@
     <main>
         <h2>{{ thread.title }}</h2>
         <div class="thread-info">
-            <strong>{{ thread.nickname }}</strong> <span class="timestamp">at {{ thread.timestamp }}</span>
+            <strong>{{ thread.nickname }}</strong>
+            <span class="timestamp">at {{ thread.timestamp }}</span>
         </div>
         <div class="thread-content">
             {{ thread.content }}
@@ -206,7 +191,8 @@
             {% for reply in thread.replies %}
                 <li class="reply-item">
                     <div class="reply-header">
-                        <strong>{{ reply.nickname }}</strong> <span class="timestamp">at {{ reply.timestamp }}</span>
+                        <strong>{{ reply.nickname }}</strong>
+                        <span class="timestamp">at {{ reply.timestamp }}</span>
                     </div>
                     <div class="reply-content">
                         {{ reply.content }}
