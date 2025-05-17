@@ -135,7 +135,7 @@
             {% for thread in threads|reverse %}
                 <li>
                     <a href="/thread/{{ thread.id }}">{{ thread.title }}</a><br>
-                    <small>Posted by {{ thread.nickname }} on {{ thread.timestamp }}</small>
+                    <small>Posted by <strong>{{ thread.nickname or '<ANON>' }}</strong> on {{ thread.timestamp|datetimeformat }}</small>
                 </li>
             {% endfor %}
         </ul>
