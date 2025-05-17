@@ -7,15 +7,30 @@
     <link rel="stylesheet" href="/static/style.css">
     <style>
         /* Global settings */
-        body {
+        html, body {
             margin: 0;
             padding: 0;
+            height: 100%;
             font-family: 'Segoe UI', sans-serif;
             background-color: #f4f4f9;
-            color: #333;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
+            overflow-y: auto;
+        }
+        /* Full-screen wavy gradient background */
+        .wavy-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(180deg, #BDC3C7, #2C3E50);
+            animation: gradientWave 10s ease-in-out infinite;
+            background-size: 200% 200%;
+        }
+        @keyframes gradientWave {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         /* Header */
@@ -24,7 +39,9 @@
             color: white;
             padding: 1.5rem 2rem;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            flex: 0 0 auto;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
         header a {
             color: white;
@@ -33,24 +50,21 @@
             font-weight: bold;
         }
 
-        /* Main area scrollable */
+        /* Main content area */
         main {
-            flex: 1 1 auto;
-            overflow-y: auto;
             max-width: 800px;
             margin: 2rem auto;
             padding: 2rem;
             background: white;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             border-radius: 12px;
-            display: flex;
-            flex-direction: column;
         }
 
         /* Form styling */
         form {
             display: flex;
             flex-direction: column;
+            margin-bottom: 2rem;
         }
         form input[type="text"],
         form textarea {
@@ -80,14 +94,11 @@
             background-color: #2980b9;
         }
 
-        /* Thread list scrollable */
+        /* Thread list */
         ul.thread-list {
             list-style: none;
             padding: 0;
-            margin: 2rem 0 0;
-            overflow-y: auto;
-            flex: 1 1 auto;
-            max-height: 400px;
+            margin: 0;
         }
         ul.thread-list li {
             margin-bottom: 1rem;
@@ -106,25 +117,10 @@
             color: #777;
             font-size: 0.85rem;
         }
-
-        /* Waves background (if needed) */
-        .wave {
-            position: fixed;
-            left: 0;
-            width: 100%;
-            height: 100px;
-            background: url('/static/wave.svg') repeat-x;
-            z-index: -1;
-            bottom: 0;
-        }
-        .wave:nth-child(2) { opacity: 0.5; bottom: 10px; }
-        .wave:nth-child(3) { opacity: 0.3; bottom: 20px; }
     </style>
 </head>
 <body>
-    <div class="wave"></div>
-    <div class="wave"></div>
-    <div class="wave"></div>
+    <div class="wavy-background"></div>
     <header>
         <a href="/">AnonHTML</a>
     </header>
