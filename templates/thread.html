@@ -193,8 +193,8 @@
     <main>
         <h2>{{ thread.title }}</h2>
         <div class="thread-info">
-            <strong>{{ thread.nickname }}</strong>
-            <span class="timestamp">at {{ thread.timestamp }}</span>
+            <strong>{{ thread.nickname or '<ANON>' }}</strong>
+            <span class="timestamp">{{ thread.timestamp|datetimeformat }}</span>
         </div>
         <div class="thread-content">
             {{ thread.content }}
@@ -205,14 +205,14 @@
             {% for reply in thread.replies %}
                 <li class="reply-item">
                     <div class="reply-header">
-                        <strong>{{ reply.nickname }}</strong>
-                        <span class="timestamp">at {{ reply.timestamp }}</span>
+                        <strong>{{ reply.nickname or '<ANON>' }}</strong>
+                        <span class="timestamp">{{ reply.timestamp|datetimeformat }}</span>
                     </div>
                     <div class="reply-content">
                         {{ reply.content }}
                         {% if reply.image_url %}
                             <img src="{{ reply.image_url }}" alt="Reply image">
-                        {% endif %}
+                        {% endif %}ф
                     </div>
                 </li>
             {% endfor %}
@@ -230,3 +230,4 @@
     </main>
 </body>
 </html>
+
