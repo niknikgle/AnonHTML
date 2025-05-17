@@ -107,5 +107,13 @@ def uploaded_file(filename):
     return send_from_directory(app.config["UPLOAD_FOLDER"], filename)
 
 
+@app.template_filter("datetimeformat")
+def datetimeformat(value, fmt="%B %d, %Y %I:%M %p"):
+    from datetime import datetime
+
+    dt = datetime.fromisoformat(value)
+    return dt.strftime(fmt)
+
+
 if __name__ == "__main__":
     app.run(debug=True)
