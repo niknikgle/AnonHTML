@@ -42,6 +42,31 @@ def save_data(data):
 @app.route("/")
 def index():
     threads = load_data()
+
+    def latest_activity(thread):
+        if thread["replies"]:
+            # Get the latest reply timestamp
+            return max(reply["timestamp"] for reply in thread["replies"])
+        else:
+            # No replies; use the thread's own timestamp
+            return thread["timestamp"]
+
+    # Sort threads by latest activity in descending order
+    threads.sort(key=latest_activity, reverse=True)
+
+    # Add formatted timestamps to each thread
+    for thread in threads:
+        thread["created_at"] = datetime.fromisoformat(thread["timestamp"]).strftime(
+            "%b %d, %Y %I:%M %p"
+        )
+        if thread["replies"]:
+            latest_reply = max(thread["replies"], key=lambda r: r["timestamp"])
+            thread["last_reply"] = datetime.fromisoformat(
+                latest_reply["timestamp"]
+            ).strftime("%b %d, %Y %I:%M %p")
+        else:
+            thread["last_reply"] = None
+
     return render_template("index.html", threads=threads)
 
 
@@ -68,7 +93,7 @@ def new_thread():
     }
     threads.append(thread)
     save_data(threads)
-    return redirect(url_for("index"))
+    return redirect(url_for("index", _anchor=f"thread-{new_id}"))
 
 
 @app.route("/reply/<int:thread_id>", methods=["POST"])
@@ -97,7 +122,12 @@ def reply(thread_id):
 
             thread["replies"].append(reply)
             save_data(threads)
-            return redirect(url_for("view_thread", thread_id=thread_id))
+            reply_index = len(thread["replies"]) - 1
+            return redirect(
+                url_for(
+                    "view_thread", thread_id=thread_id, _anchor=f"reply-{reply_index}"
+                )
+            )
     return "Thread not found", 404
 
 
