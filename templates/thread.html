@@ -226,7 +226,7 @@
         <a href="/">AnonHTML</a>
     </header>
     <main>
-        <h2>{{ thread.title }}</h2>
+        <h2>{{ thread.title }} <small class="badge">{{ thread.category }}</small></h2>
         <div class="thread-info">
             <strong>{{ thread.nickname or '<ANON>' }}</strong>
             <span class="timestamp">{{ thread.timestamp|datetimeformat }}</span>

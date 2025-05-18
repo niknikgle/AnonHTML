@@ -8,7 +8,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-
     <style>
         /* Global settings */
         html, body {
@@ -21,7 +20,6 @@
             color: #f5f5f5;
         }
 
-
         /* Full-screen wavy gradient background */
         .wavy-background {
             position: fixed;
@@ -30,10 +28,8 @@
             width: 100%;
             height: 100%;
             z-index: -1;
-            /* Removed background and animation properties */
-            background-color: #1a1a2e; /* Set to a solid color */
+            background-color: #1a1a2e;
         }
-
 
         /* Header */
         header {
@@ -52,7 +48,7 @@
             text-decoration: none;
             font-size: 1.75rem;
             font-weight: 600;
-            transition: color 0.2s ease-in-out; /* Added smooth transition */
+            transition: color 0.2s ease-in-out;
         }
 
         header a:hover {
@@ -75,6 +71,7 @@
             display: flex;
             flex-direction: column;
             margin-bottom: 2rem;
+            align-items: flex-start;
         }
         form input[type="text"],
         form textarea {
@@ -126,6 +123,7 @@
             list-style: none;
             padding: 0;
             margin: 0;
+            margin-top: 2rem;
         }
         ul.thread-list li {
             margin-bottom: 1.5rem;
@@ -140,7 +138,6 @@
             transition: color 0.2s ease;
         }
         ul.thread-list li a:hover {
-            /* Removed text-decoration: underline; */
             color: #86efac;
         }
         ul.thread-list li small {
@@ -174,11 +171,135 @@
         }
 
         .recaptcha-container {
-
-        border-radius: 0.375rem;
-        margin-bottom: 1rem;
+            border-radius: 0.375rem;
+            margin-bottom: 1rem;
         }
 
+        /* Category dropdown styling */
+        form select[name="category"] {
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border: 1px solid #6b7280;
+            border-radius: 0.375rem;
+            font-size: 1rem;
+            width: 100%;
+            box-sizing: border-box;
+            background-color: #4a5568;
+            color: #ffffff;
+            transition: border-color 0.2s ease, background-color 0.3s ease;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1rem;
+        }
+
+        form select[name="category"]:focus {
+            outline: none;
+            border-color: #008000;
+            box-shadow: 0 0 0 2px rgba(45, 208, 176, 0.2);
+        }
+
+        form select[name="category"] option {
+            background-color: #1f2937;
+            color: #ffffff;
+        }
+
+        /* Category filter dropdown styling */
+        div form select[name="category"] {
+            padding: 0.5rem;
+            border: 1px solid #6b7280;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            margin-left: 0;
+            background-color: #4a5568;
+            color: #ffffff;
+            transition: border-color 0.2s ease, background-color 0.3s ease;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.5rem center;
+            background-size: 0.75rem;
+        }
+
+        div form select[name="category"]:focus {
+            outline: none;
+            border-color: #008000;
+            box-shadow: 0 0 0 2px rgba(45, 208, 176, 0.2);
+        }
+
+        div form select[name="category"] option {
+            background-color: #1f2937;
+            color: #ffffff;
+        }
+        .badge {
+            background-color: #86efac;
+            color: #0b0f13;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            margin-right: 0.5rem;
+        }
+        div form label {
+            margin-right: 0.5rem;
+        }
+        /* Add this style for the separator */
+        .form-separator {
+            width: 100%;
+            height: 1px;
+            background-color: #6b7280;
+            margin: 2rem 0;
+            opacity: 0.5;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) { /* Medium screens and below (tablets) */
+            form {
+                flex-direction: column; /* Stack form elements vertically on small screens */
+                align-items: center; /* Center form elements */
+            }
+            form button {
+                align-self: center; /* Center the button on small screens */
+                width: 100%;  /* Make button full width on small screens */
+                max-width: 300px; /* But don't make it too wide */
+            }
+            div form {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            div form label {
+                margin-bottom: 0.5rem;
+            }
+            div form select[name="category"]{
+                margin-left: 0;
+                width: 100%;
+                max-width: 300px;
+            }
+            .thread-meta {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .thread-meta span {
+                margin-right: 0;
+            }
+        }
+
+        @media (max-width: 480px) {  /* Small screens (phones) */
+            header a {
+                font-size: 1.5rem;  /* Smaller header on very small screens */
+            }
+            main {
+                padding: 1.5rem; /* Less padding on small screens */
+            }
+            ul.thread-list li {
+                margin-bottom: 1rem;
+                padding-bottom: 1rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -191,19 +312,36 @@
             <input type="text" name="title" placeholder="Thread title" required>
             <input type="text" name="nickname" placeholder="Nickname (optional)">
             <textarea name="content" placeholder="What's on your mind?" required></textarea>
-            <div class="recaptcha-container">
-                <div class="g-recaptcha" 
-                data-sitekey="{{ recaptcha_site_key }}"
-                data-theme="dark">
-            </div>
-        </div>
-
-            
+            <select name="category" required>
+                {% for cat in categories %}
+                    <option value="{{ cat }}"
+                        {% if cat == selected_category %}selected{% endif %}>
+                        {{ cat }}
+                    </option>
+                {% endfor %}
+            </select>
+            <div class="g-recaptcha" data-sitekey="{{ recaptcha_site_key }}" data-theme="dark" style="margin-bottom: 2rem;"></div>
             <button type="submit">Post Thread</button>
         </form>
-        <ul class="thread-list">
+        <div class="form-separator"></div>
+        <div>
+            <form method="get" style="display: flex; align-items: center; margin-bottom: 0;">
+                <label>Filter by category:</label>
+                <select name="category" onchange="this.form.submit()">
+                    <option value="">All</option>
+                    {% for cat in categories %}
+                        <option value="{{ cat }}"
+                            {% if cat == selected_category %}selected{% endif %}>
+                            {{ cat }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </form>
+        </div>
+        <ul class="thread-list" style="margin-bottom: 2rem;">
             {% for thread in threads %}
                 <li>
+                    <span class="badge">{{ thread.category }}</span>
                     <a href="{{ url_for('view_thread', thread_id=thread.id) }}">{{ thread.title }}</a>
                     <div class="thread-meta">
                         <span class="created-at">Created by <strong>{{ thread.nickname or '<ANON>' }}</strong> at {{ thread.timestamp|datetimeformat }}</span>
