@@ -90,7 +90,9 @@ def index():
 
     recaptcha_site_key = os.getenv("RECAPTCHA_PUBLIC")
 
-    return render_template("index.html", recaptcha_site_key=recaptcha_site_key)
+    return render_template(
+        "index.html", threads=threads, recaptcha_site_key=recaptcha_site_key
+    )
 
 
 @app.route("/thread/<int:thread_id>")
@@ -117,7 +119,7 @@ def new_thread():
     recaptcha_response = request.form.get("g-recaptcha-response")
 
     if not recaptcha_response or not verify_recaptcha(
-        recaptcha_response, user_ip=request.remote_addr
+        recaptcha_response, request.remote_addr
     ):
         flash("CAPTCHA verification failed. Please try again.", "error")
         return redirect("/")
