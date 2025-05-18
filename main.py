@@ -25,12 +25,12 @@ ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif"}
 RECAPTCHA_SECRET = os.getenv("RECAPTCHA_SECRET")
 
 app.secret_key = os.getenv("FLASK_SECRET_KEY", "a‑hard‑to‑guess‑value")
-
-
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
-# Create the uploads directory if it doesn't exist
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+CATEGORIES = ["General", "Memes"]
+recaptcha_site_key = os.getenv("RECAPTCHA_PUBLIC")
 
 
 def allowed_file(filename):
@@ -38,10 +38,14 @@ def allowed_file(filename):
 
 
 def load_data():
+    data = []
     if os.path.exists(DATA_FILE):
         with open(DATA_FILE, "r") as f:
-            return json.load(f)
-    return []
+            data = json.load(f)
+
+    for t in data:
+        t.setdefault("category", "General")
+    return data
 
 
 def save_data(data):
@@ -66,35 +70,24 @@ def verify_recaptcha(response_token, remote_ip=None):
 @app.route("/")
 def index():
     threads = load_data()
+    selected_category = request.args.get("category")
 
-    def latest_activity(thread):
-        if thread["replies"]:
-            # Get the latest reply timestamp
-            return max(reply["timestamp"] for reply in thread["replies"])
-        else:
-            # No replies; use the thread's own timestamp
-            return thread["timestamp"]
+    if selected_category:
+        threads = [t for t in threads if t.get("category") == selected_category]
 
-    # Sort threads by latest activity in descending order
-    threads.sort(key=latest_activity, reverse=True)
-
-    # Add formatted timestamps to each thread
-    for thread in threads:
-        thread["created_at"] = datetime.fromisoformat(thread["timestamp"]).strftime(
-            "%b %d, %Y %I:%M %p"
-        )
-        if thread["replies"]:
-            latest_reply = max(thread["replies"], key=lambda r: r["timestamp"])
-            thread["last_reply"] = datetime.fromisoformat(
-                latest_reply["timestamp"]
-            ).strftime("%b %d, %Y %I:%M %p")
-        else:
-            thread["last_reply"] = None
-
-    recaptcha_site_key = os.getenv("RECAPTCHA_PUBLIC")
+    threads.sort(
+        key=lambda t: max(
+            [t["timestamp"]] + [r["timestamp"] for r in t.get("replies", [])]
+        ),
+        reverse=True,
+    )
 
     return render_template(
-        "index.html", threads=threads, recaptcha_site_key=recaptcha_site_key
+        "index.html",
+        threads=threads,
+        recaptcha_site_key=recaptcha_site_key,
+        categories=CATEGORIES,
+        selected_category=selected_category,
     )
 
 
@@ -104,7 +97,7 @@ def view_thread(thread_id):
     thread = next((t for t in threads if t["id"] == thread_id), None)
     if not thread:
         return "Thread not found", 404
-    return render_template("thread.html", thread=thread)
+    return render_template("thread.html", thread=thread, categories=CATEGORIES)
 
 
 @app.route("/new_thread", methods=["POST"])
@@ -117,15 +110,9 @@ def new_thread():
         "nickname": request.form.get("nickname", "Anon"),
         "content": request.form["content"],
         "timestamp": datetime.now().isoformat(),
+        "category": request.form.get("category", "General"),
         "replies": [],
     }
-    recaptcha_response = request.form.get("g-recaptcha-response")
-
-    if not recaptcha_response or not verify_recaptcha(
-        recaptcha_response, request.remote_addr
-    ):
-        flash("CAPTCHA verification failed. Please try again.", "error")
-        return redirect("/")
 
     threads.append(thread)
     save_data(threads)
