@@ -172,12 +172,11 @@
         .last-reply {
             color: #29AB87;
         }
-        
+
         .recaptcha-container {
-        background: #f5f5f5;
-        padding: 0.5rem;
+
         border-radius: 0.375rem;
-        margin-bottom: 1rem;
+        margin-bottom: 0.7rem;
         }
 
     </style>
@@ -192,9 +191,8 @@
             <input type="text" name="title" placeholder="Thread title" required>
             <input type="text" name="nickname" placeholder="Nickname (optional)">
             <textarea name="content" placeholder="What's on your mind?" required></textarea>
-
-            <div class="g-recaptcha" data-sitekey="{{ recaptcha_site_key }}"></div>
-
+            <div class="recaptcha-container"><div class="g-recaptcha" data-sitekey="{{ recaptcha_site_key }}"></div></div>
+            
             <button type="submit">Post Thread</button>
         </form>
         <ul class="thread-list">
