@@ -24,6 +24,9 @@ ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif"}
 
 RECAPTCHA_SECRET = os.getenv("RECAPTCHA_SECRET")
 
+app.secret_key = os.getenv("FLASK_SECRET_KEY", "a‑hard‑to‑guess‑value")
+
+
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 # Create the uploads directory if it doesn't exist
@@ -126,7 +129,7 @@ def new_thread():
 
     threads.append(thread)
     save_data(threads)
-    return redirect(url_for("index", _anchor=f"thread-{new_id}"))
+    return redirect(f"{url_for('index')}#thread-{new_id}")
 
 
 @app.route("/reply/<int:thread_id>", methods=["POST"])
