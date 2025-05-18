@@ -7,6 +7,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
     <style>
         /* Global settings */
         html, body {
@@ -182,6 +184,9 @@
             <input type="text" name="title" placeholder="Thread title" required>
             <input type="text" name="nickname" placeholder="Nickname (optional)">
             <textarea name="content" placeholder="What's on your mind?" required></textarea>
+
+            <div class="g-recaptcha" data-sitekey="{{ recaptcha_site_key }}"></div>
+
             <button type="submit">Post Thread</button>
         </form>
         <ul class="thread-list">

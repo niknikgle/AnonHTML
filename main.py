@@ -5,21 +5,28 @@ from flask import (
     redirect,
     url_for,
     send_from_directory,
+    flash,
 )
 from datetime import datetime
 import json
 import os
 from werkzeug.utils import secure_filename
+from dotenv import load_dotenv
+import requests
 
 app = Flask(__name__)
+
+load_dotenv()
 
 DATA_FILE = "forum_data.json"
 UPLOAD_FOLDER = os.path.join("static", "uploads")
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif"}
 
+RECAPTCHA_SECRET = os.getenv("RECAPTCHA_SECRET")
+
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
-# Make sure the upload folder exists
+# Create the uploads directory if it doesn't exist
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 
@@ -37,6 +44,20 @@ def load_data():
 def save_data(data):
     with open(DATA_FILE, "w") as f:
         json.dump(data, f, indent=4)
+
+
+def verify_recaptcha(response_token, remote_ip=None):
+    """Send verification request to Google."""
+    payload = {
+        "secret": RECAPTCHA_SECRET,
+        "response": response_token,
+    }
+    if remote_ip:
+        payload["remoteip"] = remote_ip
+
+    r = requests.post("https://www.google.com/recaptcha/api/siteverify", data=payload)
+    result = r.json()
+    return result.get("success", False)
 
 
 @app.route("/")
@@ -67,7 +88,9 @@ def index():
         else:
             thread["last_reply"] = None
 
-    return render_template("index.html", threads=threads)
+    recaptcha_site_key = os.getenv("RECAPTCHA_PUBLIC")
+
+    return render_template("index.html", recaptcha_site_key=recaptcha_site_key)
 
 
 @app.route("/thread/<int:thread_id>")
@@ -91,6 +114,14 @@ def new_thread():
         "timestamp": datetime.now().isoformat(),
         "replies": [],
     }
+    recaptcha_response = request.form.get("g-recaptcha-response")
+
+    if not recaptcha_response or not verify_recaptcha(
+        recaptcha_response, user_ip=request.remote_addr
+    ):
+        flash("CAPTCHA verification failed. Please try again.", "error")
+        return redirect("/")
+
     threads.append(thread)
     save_data(threads)
     return redirect(url_for("index", _anchor=f"thread-{new_id}"))
