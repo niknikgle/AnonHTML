@@ -122,7 +122,7 @@ def new_thread():
 
     threads.append(thread)
     save_data(threads)
-    return redirect(f"{url_for('index')}#thread-{new_id}")
+    return render_template("index.html", threads=threads, new_thread_id=new_id)
 
 
 @app.route("/reply/<int:thread_id>", methods=["POST"])
