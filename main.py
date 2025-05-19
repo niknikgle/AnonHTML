@@ -124,7 +124,7 @@ def new_thread():
 
     threads.append(thread)
     save_data(threads)
-    return render_template("index.html", threads=threads, new_thread_id=new_id)
+    return redirect(url_for("view_thread", thread_id=new_id))
 
 
 @app.route("/reply/<int:thread_id>", methods=["POST"])
