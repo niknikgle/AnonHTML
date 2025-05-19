@@ -114,6 +114,12 @@ def new_thread():
         "replies": [],
     }
 
+    recaptcha_response = request.form.get("g-recaptcha-response")
+
+    if not recaptcha_response or not verify_recaptcha(...):
+        flash("CAPTCHA verification failed. Please try again.", "error")
+        return redirect("/")
+
     threads.append(thread)
     save_data(threads)
     return redirect(f"{url_for('index')}#thread-{new_id}")
